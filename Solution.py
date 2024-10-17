@@ -1,35 +1,15 @@
-import heapq
-
 class Solution:
-    def longestDiverseString(self, a: int, b: int, c: int) -> str:
-        pq = []
-        if a > 0:
-            heapq.heappush(pq, (-a, "a"))
-        if b > 0:
-            heapq.heappush(pq, (-b, "b"))
-        if c > 0:
-            heapq.heappush(pq, (-c, "c"))
+    def minimumSteps(self, s: str) -> int:
+        white_position = 0
+        total_swaps = 0
 
-        result = []
-        while pq:
-            count, character = heapq.heappop(pq)
-            count = -count
-            if (
-                len(result) >= 2
-                and result[-1] == character
-                and result[-2] == character
-            ):
-                if not pq:
-                    break
-                tempCnt, tempChar = heapq.heappop(pq)
-                result.append(tempChar)
-                if (tempCnt + 1) < 0:
-                    heapq.heappush(pq, (tempCnt + 1, tempChar))
-                heapq.heappush(pq, (-count, character))
-            else:
-                count -= 1
-                result.append(character)
-                if count > 0:
-                    heapq.heappush(pq, (-count, character))
+        # Iterate through each ball in the string
+        for current_pos, char in enumerate(s):
+            if char == "0":
+                # Calculate the number of swaps needed
+                total_swaps += current_pos - white_position
 
-        return "".join(result)
+                # Move the next available position for a white ball one step to the right
+                white_position += 1
+
+        return total_swaps
